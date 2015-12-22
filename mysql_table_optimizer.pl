@@ -6,6 +6,7 @@ import MySQLdb
 import re
 import sys
 import fileinput
+import argparse
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -15,7 +16,15 @@ formatter = logging.Formatter('%(asctime)s - %(message)s')
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 
+#parsing arguments
+parser = argparse.ArgumentParser(description='Script to optimize a list of MySQL tables to retain unused disk space',
+	                                epilog='It takes care of rep lag as well as it start optimizing tables on small-big table order')
+parser.add_argument('-f','--file', help='The file which contains the list of table in DB.TABLENAME format')
+args = parser.parse_args()
+file = args.file
+
 #Check if the lag is 0 and if there is any Optmize process running
+
 def check(server):
 	db = MySQLdb.connect(server,"admin","*****","mysql")
         cursor = db.cursor()
@@ -54,15 +63,15 @@ def run_optimize(t):
 def main():
 	if check('localhost') == 0:
 		print "Success"
-		f = open('/home/nandan.adhikari/table.list', 'r')
-		data = open('/home/nandan.adhikari/table.list').read()
+		f = open(file, 'r')
+		data = open(file).read()
 		for table in f:
 			if not re.findall(r'done=.*',str(table)):
 				table = table.rstrip()
 				logger.info('Optimize starting on table %s' %table)
 				try:
 					run_optimize(table)
-					f2 = open('/home/nandan.adhikari/table.list', 'w')
+					f2 = open('file, 'w')
 					f2.write( re.sub("%s" %table,"done=%s" %table,data) )
 					f2.close()
 				except Exception,e:
