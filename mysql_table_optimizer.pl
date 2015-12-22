@@ -71,7 +71,7 @@ def main():
 				logger.info('Optimize starting on table %s' %table)
 				try:
 					run_optimize(table)
-					f2 = open('file, 'w')
+					f2 = open(file, 'w')
 					f2.write( re.sub("%s" %table,"done=%s" %table,data) )
 					f2.close()
 				except Exception,e:
