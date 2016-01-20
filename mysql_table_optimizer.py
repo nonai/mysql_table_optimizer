@@ -19,7 +19,7 @@ logger.addHandler(fh)
 #parsing arguments
 parser = argparse.ArgumentParser(description='Script to optimize a list of MySQL tables to retain unused disk space',
 	                                epilog='It takes care of rep lag as well as it start optimizing tables on small-big table order')
-parser.add_argument('-f','--file', help='The file which contains the list of table in DB.TABLENAME format')
+parser.add_argument('-f','--file', help='The file which contains the list of table in DB.TABLENAME format',required=True)
 args = parser.parse_args()
 file = args.file
 
